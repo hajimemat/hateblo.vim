@@ -27,7 +27,7 @@ endfunction
 " command! -nargs=0 TestS echo plugin#getCandidates()[0]
 " command! -nargs=0 TestParse call plugin#parseFirstLine(getline(1))
 " command! -nargs=0 TestParse call plugin#parseFirstLine(getline(1))
-g:loaded_hateblo = 1
+let g:loaded_hateblo = 1
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
