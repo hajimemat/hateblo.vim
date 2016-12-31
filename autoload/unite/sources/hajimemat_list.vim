@@ -1,4 +1,4 @@
-set s:save_cpo=&cpo
+let s:save_cpo=&cpo
 set cpo&vim
 
 let s:unite_hajimemat_list_source = {
