@@ -8,7 +8,13 @@ let g:hateblo_draft_marker = "D:"
 augroup hateble_env
   autocmd!
   autocmd BufWriteCmd hateblo:* call hateblo#editor#save()
+  autocmd FileType *.hateblo call s:hateblo_env()
 augroup END
+
+function! s:hateblo_env()
+  nnoremap 
+  cmap w :wwwwww
+endfunction
 
 
 " command! -nargs=0 Test call hateblo#editor#edit(

@@ -115,7 +115,9 @@ function! hateblo#editor#create()
     return 0
   endif
   let l:data['categories'] = split(input('CATEGORIES: '),',')
-  execute 'tabe hateblo:'.fnameescape(l:data['title'])
+  execute 'enew'
+  setlocal buftype=nowrite noswapfile
+  execute bufname('hateblo:'.fnameescape(l:data['title']))
   let b:entry_is_draft = 1
   call append(0, hateblo#editor#buildFirstLine(l:data['title'], l:data['categories']))
   " let l:data = hateblo#editor#parseFirstLine(getline(1))
