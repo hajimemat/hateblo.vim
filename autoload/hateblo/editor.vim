@@ -1,4 +1,3 @@
-
 " 編集
 function! hateblo#editor#edit(entry_url)
   let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
@@ -101,7 +100,11 @@ function! hateblo#editor#create()
       return 0
     endif
     let l:data['categories'] = split(input('CATEGORIES: '),',')
+    execute 'tabe hateblo:'.fnameescape(l:data['title'])
     call append(0, hateblo#editor#buildFirstLine(l:data['title'], l:data['categories']))
+  else
+    execute 'tabe hateblo:'.fnameescape(l:data['title'])
+    call append(0, getline(0,'$'))
   endif
 
   let b:entry_is_new=1

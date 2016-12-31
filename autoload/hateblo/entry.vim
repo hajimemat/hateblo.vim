@@ -10,6 +10,7 @@ function! hateblo#entry#getEntriesWithURL(api_url)
   let b:hateblo_entries = l:feed['entry']
   let b:hateblo_next_link = ''
   for l:link in l:feed['link']
+    echo l:link
     if l:link['rel'] == 'next'
       let b:hateblo_next_link = l:link['href']
     endif
@@ -24,7 +25,7 @@ function! hateblo#entry#getList()
   endif
 
   let l:entries = b:hateblo_entries
-  let l:entry_list = []
+  let l:list = []
 
   for l:entry in l:entries
     if l:entry['app:control']['app:draft'] == 'yes'
