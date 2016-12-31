@@ -13,6 +13,7 @@ let s:unite_hajimemat_list_source = {
 
 function! s:unite_hajimemat_list_source.action_table.on_choose.func(candidate)
   echo a:candidate
+  s:detailEntry(a:candidate:entry_url)
 endfunction
 
 function! s:unite_hajimemat_list_source.gather_candidates(args, context)
@@ -24,9 +25,15 @@ function! s:unite_hajimemat_list_source.gather_candidates(args, context)
       \ 'word': l:entry['title'],
       \ 'source': 'hajimemat-list',
       \ 'kind': 'file',
+      \ 'entry_url': l:entry['entry_url'],
       \})
   endfor
   return l:list
+endfunction
+
+function! s:detailEntry(entry_url)
+  let l:entry = webapi#atom#getFeed(a:antry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
+  call append(0, split(l:entry['content'], '\n'))
 endfunction
 
 
