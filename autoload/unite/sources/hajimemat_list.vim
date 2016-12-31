@@ -33,7 +33,8 @@ function! s:unite_hajimemat_list_source.gather_candidates(args, context)
 endfunction
 
 function! s:detailEntry(entry_url)
-  let l:entry = webapi#atom#getFeed(a:antry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
+  let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
+  echo l:entry
   call append(0, split(l:entry['content'], '\n'))
 endfunction
 
@@ -48,6 +49,8 @@ endfunction
 function! unite#sources#hajimemat_list#define()
   return s:unite_hajimemat_list_source
 endfunction
+
+call s:detailEntry('https://blog.hatena.ne.jp/kurari0118/hajime-mat.hateblo.jp/atom/entry/10328749687202342149')
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
