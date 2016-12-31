@@ -19,7 +19,7 @@ endfunction
 function! s:unite_action_on_choose(candidate)
   if a:candidate.action__action == 'edit_entry'
     call hateblo#editor#edit(a:candidate['action__entry_url'])
-  elseif a:candidate.action__action == 'next'
+  elseif a:candidate.action__action == 'next_page'
     call hateblo#entry#getEntriesWithURL(a:candidate.action__url)
   elseif a:candidate.action__action == 'new'
     call hateblo#editor#create()
