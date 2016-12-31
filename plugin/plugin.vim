@@ -131,10 +131,10 @@ endfunction
 
 augroup hateble_env
   autocmd!
-  autocmd BufWrite hateblo:* call s:a()
+  autocmd BufWriteCmd hateblo:* call plugin#onsave()
 augroup END
 
-function! s:a()
+function! plugin#onsave()
   call plugin#saveEntry()
 endfunction
 
