@@ -17,7 +17,7 @@ function! hateblo#entry#getList()
       \ 'word': l:entry['title'],
       \ 'source': 'hajimemat-list',
       \ 'kind': 'file',
-      \ 'entry_url': l:entry['link'][0]['href'],
+      \ 'action__entry_url': l:entry['link'][0]['href'],
       \ 'draft': l:entry['app:control']['app:draft']
       \})
   endfor

@@ -5,7 +5,10 @@ let s:source = {
       \ 'description': 'Entry list of hateblo',
       \ 'action_table': {
       \  'on_choose': {
-      \   }
+      \   },
+      \  'publish': {
+      \   'description': '公開する'
+      \  }
       \ },
       \ 'default_action': 'on_choose'
       \ }

@@ -1,13 +1,13 @@
 
 " 編集
-function! hateblo#editor#editEntry(entry_url)
+function! hateblo#editor#edit(entry_url)
   let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
   let l:type = 'html'
   execute 'edit hateblo:'.fnameescape(l:entry['title'])
   execute ":%d"
   let b:entry_url = a:entry_url
   let b:entry_is_new = 0
-  call append(0, plugin#buildFirstLine(l:entry['title'],plugin#getEntryCategory(l:entry)))
+  call append(0, hateblo#editor#buildFirstLine(l:entry['title'],hateblo#entry#getCategories(l:entry)))
   call append(2, split(l:entry['content'], '\n'))
   execute ":2"
   echo l:entry['content.type']
@@ -56,7 +56,7 @@ function! hateblo#editor#save()
   if b:entry_is_new == 1
     echo "Creating...."
     call webapi#atom#createEntry(
-      \ plugin#getEndPoint().'/atom/entry',
+      \ hateblo#webapi#getEntryEndPoint(),
       \ g:hateblo_vim['user'],
       \ g:hateblo_vim['api_key'],
       \ {
@@ -108,4 +108,3 @@ function! hateblo#editor#create()
   execute 'setlocal filetype=markdowm.hateblo'
 endfunction
 
-call hateblo#editor#editEntry(hateblo#entry#getList()[0]['entry_url'])
