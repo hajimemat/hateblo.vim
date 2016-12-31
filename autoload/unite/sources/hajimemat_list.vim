@@ -21,7 +21,6 @@ function! s:unite_hajimemat_list_source.gather_candidates(args, context)
   let l:entries = b:entries
   let l:list = []
   for l:entry in l:entries
-    echo l:entry
     call add(l:list, {
       \ 'word': l:entry['title'],
       \ 'source': 'hajimemat-list',
