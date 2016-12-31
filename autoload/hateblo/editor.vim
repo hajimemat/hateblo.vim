@@ -68,7 +68,7 @@ function! hateblo#editor#save()
   endif
 
   if b:entry_is_new == 1
-    call webapi#atom#createEntry(
+    let b:entry_url = webapi#atom#createEntry(
       \ hateblo#webapi#getEntryEndPoint(),
       \ g:hateblo['user'],
       \ g:hateblo['api_key'],
@@ -82,12 +82,13 @@ function! hateblo#editor#save()
       \   },
       \   'category': l:categories
       \ })
+    let b:entry_is_new = 0
     echom "Created"
-    execute(":q!")
-    call hateblo#entry#getEntries()
-    Unite hateblo-list
+    " execute(":q!")
+    " call hateblo#entry#getEntries()
+    " Unite hateblo-list
   else
-    call webapi#atom#updateEntry(
+    let res = webapi#atom#updateEntry(
       \ b:entry_url,
       \ g:hateblo['user'],
       \ g:hateblo['api_key'],
