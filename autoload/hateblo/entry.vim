@@ -10,7 +10,6 @@ function! hateblo#entry#getEntriesWithURL(api_url)
   let b:hateblo_entries = l:feed['entry']
   let b:hateblo_next_link = ''
   for l:link in l:feed['link']
-    echo l:link
     if l:link['rel'] == 'next'
       let b:hateblo_next_link = l:link['href']
     endif
@@ -59,6 +58,13 @@ function! hateblo#entry#getList()
     \ 'source': 'hateblo-list',
     \ 'kind': 'file',
     \ 'action__action': 'new',
+    \})
+
+  call add(l:list, {
+    \ 'word': '### Reflesh ###',
+    \ 'source': 'hateblo-list',
+    \ 'kind': 'file',
+    \ 'action__action': 'reflesh',
     \})
   return l:list
 endfunction
