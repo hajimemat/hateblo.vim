@@ -12,7 +12,6 @@ augroup hateble_env
 augroup END
 
 function! s:hateblo_env()
-  nnoremap 
   cmap w :wwwwww
 endfunction
 
