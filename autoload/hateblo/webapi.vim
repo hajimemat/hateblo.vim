@@ -1,9 +1,9 @@
 " はてなブログ
 let g:hateblo = {
       \ 'entry_point': 'https://blog.hatena.ne.jp',
-      \ 'user': 'kurari0118',
-      \ 'blog': 'hajime-mat.hateblo.jp',
-      \ 'api_key': 'k1kcgqc81j'
+      \ 'user': 'USERID',
+      \ 'blog': 'BLOGNAME',
+      \ 'api_key': 'APIKEY'
       \ } 
 
 " エントリポイントを取得する
