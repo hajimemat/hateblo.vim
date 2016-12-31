@@ -9,7 +9,7 @@ function! hateblo#editor#edit(entry_url)
   call append(0, hateblo#editor#buildFirstLine(l:entry['title'],hateblo#entry#getCategories(l:entry)))
   call append(2, split(l:entry['content'], '\n'))
   execute ":2"
-  echo l:entry['content.type']
+  echom l:entry['content.type']
   if l:entry['content.type']  ==# 'text/x-markdown'
     let l:type = 'markdown'
   elseif l:entry['content.type']  ==# 'text/x-hatena-syntax'
@@ -53,7 +53,7 @@ function! hateblo#editor#save()
   let l:contents = join(getline(3,'$'), "\n")
 
   if b:entry_is_new == 1
-    echo "Creating...."
+    echom "Creating...."
     call webapi#atom#createEntry(
       \ hateblo#webapi#getEntryEndPoint(),
       \ g:hateblo_vim['user'],
@@ -68,9 +68,10 @@ function! hateblo#editor#save()
       \   },
       \   'category': l:categories
       \ })
-    echo "Created"
+    echom "Created"
+    Unite hateblo-list
   else
-    echo "Saving...."
+    echom "Saving...."
     call webapi#atom#updateEntry(
       \ b:entry_url,
       \ g:hateblo_vim['user'],
@@ -85,27 +86,36 @@ function! hateblo#editor#save()
       \   },
       \   'category': l:categories
       \ })
-    echo "Saved"
+    echom "Saved"
   endif
   
 endfunction
 
 function! hateblo#editor#create()
-  let l:data = hateblo#editor#parseFirstLine(getline(1))
-  if len(l:data) < 1
-    let l:data = {}
-    let l:data['title'] = input('TITLE: ')
-    if len(l:data['title']) < 1
-      echo 'Canceled'
-      return 0
-    endif
-    let l:data['categories'] = split(input('CATEGORIES: '),',')
-    execute 'tabe hateblo:'.fnameescape(l:data['title'])
-    call append(0, hateblo#editor#buildFirstLine(l:data['title'], l:data['categories']))
-  else
-    execute 'tabe hateblo:'.fnameescape(l:data['title'])
-    call append(0, getline(0,'$'))
+  let l:data = {}
+  let l:data['title'] = input('TITLE: ')
+  if len(l:data['title']) < 1
+    echom 'Canceled'
+    return 0
   endif
+  let l:data['categories'] = split(input('CATEGORIES: '),',')
+  execute 'tabe hateblo:'.fnameescape(l:data['title'])
+  call append(0, hateblo#editor#buildFirstLine(l:data['title'], l:data['categories']))
+  " let l:data = hateblo#editor#parseFirstLine(getline(1))
+  " if len(l:data) < 1
+  "   let l:data = {}
+  "   let l:data['title'] = input('TITLE: ')
+  "   if len(l:data['title']) < 1
+  "     echom 'Canceled'
+  "     return 0
+  "   endif
+  "   let l:data['categories'] = split(input('CATEGORIES: '),',')
+  "   execute 'tabe hateblo:'.fnameescape(l:data['title'])
+  "   call append(0, hateblo#editor#buildFirstLine(l:data['title'], l:data['categories']))
+  " else
+  "   execute 'tabe hateblo:'.fnameescape(l:data['title'])
+  "   call append(0, getline(0,'$'))
+  " endif
 
   let b:entry_is_new=1
   execute 'setlocal filetype=markdowm.hateblo'
