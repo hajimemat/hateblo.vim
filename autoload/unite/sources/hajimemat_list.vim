@@ -26,7 +26,8 @@ function! s:unite_hajimemat_list_source.gather_candidates(args, context)
       \ 'word': l:entry['title'],
       \ 'source': 'hajimemat-list',
       \ 'kind': 'file',
-      \ 'entry_url': l:entry['entry_url'],
+      \ 'entry_url': l:entry['link'][0]['href'],
+      \ 'draft': l:entry['app;control']['app:draft']
       \})
   endfor
   return l:list
