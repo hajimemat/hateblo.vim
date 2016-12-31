@@ -1,3 +1,6 @@
+let s:save_cpo=&cpo
+set cpo&vim
+
 " はてなブログ
 " let g:hateblo = {
 "       \ 'entry_point': 'https://blog.hatena.ne.jp',
@@ -21,3 +24,5 @@ function! hateblo#webapi#getEntryEndPoint()
     \ .'/atom/entry'
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo

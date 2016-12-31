@@ -1,6 +1,9 @@
 let s:save_cpo=&cpo
 set cpo&vim
-" hoge
+
+if exists("g:loaded_hateblo")
+  finish
+endif
 
 nmap <leader><leader> :source %<CR>
 
@@ -12,11 +15,11 @@ augroup hateble_env
 augroup END
 
 function! s:hateblo_env()
-  cmap <buffer> w call hateblo#editor#save()
+  cmap <buffer> w call hateblo#editor#save()<CR>
 endfunction
 
 
-" command! -nargs=0 Test call hateblo#editor#edit(
+"command! -nargs=0 HatebloList Unite 
 "   \ hateblo#entry#getList()[0]['entry_url'])
 " command! -nargs=0 TestUp call plugin#editEntry(b:entry_url)
 " command! -nargs=0 TestSave call plugin#saveEntry()
@@ -24,7 +27,7 @@ endfunction
 " command! -nargs=0 TestS echo plugin#getCandidates()[0]
 " command! -nargs=0 TestParse call plugin#parseFirstLine(getline(1))
 " command! -nargs=0 TestParse call plugin#parseFirstLine(getline(1))
-
+g:loaded_hateblo = 1
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

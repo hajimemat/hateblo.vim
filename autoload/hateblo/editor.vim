@@ -1,3 +1,6 @@
+let s:save_cpo=&cpo
+set cpo&vim
+
 " 編集
 function! hateblo#editor#edit(entry_url)
   let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo['user'],g:hateblo['api_key'])
@@ -141,3 +144,5 @@ function! hateblo#editor#create()
   execute 'setlocal filetype=markdowm.hateblo'
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo

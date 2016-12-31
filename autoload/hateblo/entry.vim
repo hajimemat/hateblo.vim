@@ -1,3 +1,5 @@
+let s:save_cpo=&cpo
+set cpo&vim
 " エントリの処理
 
 " エントリ一覧を取得する
@@ -78,3 +80,5 @@ function! hateblo#entry#getCategories(entry)
   return l:categories
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
