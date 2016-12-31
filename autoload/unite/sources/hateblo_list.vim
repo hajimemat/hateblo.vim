@@ -18,7 +18,7 @@ function! s:source.gather_candidates(args,context)
 endfunction
 
 function! s:source.action_table.on_choose.func(candidate)
-  echo a.candidate
+  echo a:candidate
 endfunction
 
 function! unite#sources#hateblo_list#define()
