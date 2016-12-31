@@ -16,16 +16,17 @@ function! s:source.gather_candidates(args,context)
   return hateblo#entry#getList()
 endfunction
 
-function! s:unite_action_edit(candidate)
-  call hateblo#editor#edit(a:candidate['action__entry_url'])
+function! s:unite_action_on_choose(candidate)
+  echo a:candidate
+  if a:candidate.action__action == 'edit_entry'
+    call hateblo#editor#edit(a:candidate['action__entry_url'])
+  else
+    echo 'not impl'
+  endif
 endfunction
 
 function! s:source.action_table.on_choose.func(candidate)
-    if a:candidate.atction__action == 'edit_entry'
-        call s:unite_action_edit(a:candidate)
-    else
-      echo 'not impl'
-    endif
+    call s:unite_action_on_choose(a:candidate)
 endfunction
 
 function! unite#sources#hateblo_list#define()
