@@ -1,0 +1,101 @@
+TITLE=Atompubに興味を持つ
+CATEGORIES=web
+
+# Atompubとは??
+
+はてなをnvimから上げていてふと疑問におもった。
+このアップロード形式、atompubというリモートプロシージャらしきものを使っているのだが、なんなんだろうこれ。
+
+というわけで調べてみた
+
+> AtomはWeb APIの次世代標準として期待されているものです。AtomはThe Atom Syndication Format及びThe Atom Publishing Protocolという二つの大きな仕様から構成されていますが、このうち，IETFで新しくRFCとなったAtom Publishing Protocol（AtomPub）を中心に解説します。
+>
+>AtomPubはシンプルですが，その応用力の広さから，様々なWeb APIの標準プロトコルとして広く応用されることが期待されています。Webサービスのサーバ側，クライアント側，双方にこれから関わるであろうエンジニアの方に是非ご一読いただきたいと思います。
+><cite>http://gihyo.jp/dev/feature/01/atompub</cite>
+
+
+PHPでの実装例でも読んでみよう。
+
+> PHPでAtomPub(Atom Publishing Protocol)を使って、テキストファイルから はてなブログに投稿するスクリプトを書きました。<cite>http://sprint-life.hatenablog.com/entry/2014/02/27/211524</cite>
+
+ふむ。
+
+どうやらWSSE認証というものを使っているらしい。
+が、ちょっと記事が過去すぎるので本家をのぞく
+
+><cite>http://developer.hatena.ne.jp/ja/documents/blog/apis/atom</cite>
+
+><cite>http://developer.hatena.ne.jp/ja/documents/auth/apis/wsse</cite>
+
+OAuthとWSSE認証があるのか。
+
+OAuthを使うのは面倒なのでWSSE認証でいいかなぁ。
+
+## WSSE認証についてわかったこと
+
+- ようするに、リクエスト毎にHTTPヘッダに認証情報を送りつける
+
+形式のサンプル
+*X-WSSE: UsernameToken Username=&quot;hatena&quot;, PasswordDigest=&quot;ZCNaK2jrXr4+zsCaYK/YLUxImZU=&quot;, Nonce=&quot;Uh95NQlviNpJQR1MmML+zq6pFxE=&quot;, Created=&quot;2005-01-18T03:20:15Z&quot;*
+
+Username: ユーザ名
+Nonce: トークン
+Created: ISO-8601形式の作成日時
+PasswordDigest: Nonce, Created, APIキーを文字連結しSHA1ダイジェストをBase64した文字列
+
+PHPでこれらを作るには
+```php
+<?php
+$nonce = sha1(md5(time()),true);
+$created = date('c');
+$username = &quot;username&quot;
+$digest = base64_encode(sha1($nonce.$created.$key,true));
+$header = sprintf('X-WSSE: UsernameToken Usernae=&quot;%s&quot;, PasswordDigest=&quot;%s&quot;, Nonce=&quot;%s&quot;, Created=&quot;%s&quot;', $username, $digest, $nonce, $created);
+```
+
+こんな感じか。
+
+はてなにあるように、エントリポイントへのアクセスを試す
+
+
+```php
+<?php
+$nonce = base64_encode(sha1(md5(time()),true));
+$created = date('c');
+$username = &quot;はてなID&quot;;
+$key = &quot;はてなAPIキー&quot;;
+$blog = &quot;ブログID&quot;;
+
+$digest = base64_encode(sha1($nonce.$created.$key,true));
+$wsse = sprintf('X-WSSE: UsernameToken Username=&quot;%s&quot;, PasswordDigest=&quot;%s&quot;, Nonce=&quot;%s&quot;, Created=&quot;%s&quot;', $username, $digest, $nonce, $created);
+
+# エントリポイントの取得
+$entry_point = sprintf(&quot;https://blog.hatena.ne.jp/%s/%s/atom&quot;, $username, $blog);
+# 記事リスト
+$entry_point = sprintf(&quot;https://blog.hatena.ne.jp/%s/%s/atom/entry&quot;, $username, $blog);
+# 記事
+$entry_point = sprintf(&quot;https://blog.hatena.ne.jp/%s/%s/atom/entry/10328749687202422059&quot;, $username, $blog);
+
+$ch = curl_init($entry_point);
+curl_setopt_array($ch, [
+    CURLOPT_HTTPHEADER => [
+        $wsse
+    ],
+    #CURLOPT_HTTPGET => false,
+    #CURLOPT_POST => true
+]);
+$result = curl_exec($ch);
+
+echo $wsse;
+var_Dump(curl_getinfo($ch));
+echo $result;
+```
+
+XMLが戻ってくるので、こいつをパースするのか、なるほど。
+これをVIMScriptで書くにはどうするのだろう。
+あと、サーバ側での検証方法は多分、おんなじパラメタでdigest作って、一致すれば良いだけだと思う。
+
+こいつをvimscriptで書くにはどうするのか
+
+これを読んで見ることにする
+><cite>https://github.com/moznion/hateblo.vim/blob/master/autoload/hateblo.vim</cite>

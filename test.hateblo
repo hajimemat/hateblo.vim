@@ -1,10 +1,13 @@
+TITLE=testaaa
+CATEGORIES=web
+
 let s:save_cpo=&cpo
 set cpo&vim
-" hoge
+&quot; hoge
 
 nmap <leader><leader> :source %<CR>
 
-" はてなブログ
+&quot; はてなブログ
 let g:hatena_entry_point = 'https://blog.hatena.ne.jp'
 
 function! plugin#getEndPoint()
@@ -37,15 +40,16 @@ endfunction
 function! plugin#editEntry(entry_url)
   let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
   let l:type = 'html'
-  execute 'edit hateblo:'.l:entry['title']
+  execute 'edit '.l:entry['title'].'.hateblo'
+  echo b:entry_url
   let b:entry_url = a:entry_url
   let b:entry_is_new = 0
-  "echo l:entry
-  execute ":%d"
-  call append(0, "TITLE=".l:entry['title'])
-  call append(1, "CATEGORIES=".join(plugin#getEntryCategory(l:entry),','))
+  &quot;echo l:entry
+  execute &quot;:%d&quot;
+  call append(0, &quot;TITLE=&quot;.l:entry['title'])
+  call append(1, &quot;CATEGORIES=&quot;.join(plugin#getEntryCategory(l:entry),','))
   call append(3, split(l:entry['content'], '\n'))
-  execute ":4"
+  execute &quot;:4&quot;
   echo l:entry['content.type']
   if l:entry['content.type']  ==# 'text/x-markdown'
     let l:type = 'markdown'
@@ -67,11 +71,11 @@ endfunction
 function! plugin#saveEntry()
   let l:title = getline(1)[len('TITLE='):]
   let l:categories = split(getline(2)[len('CATEGORIES='):],',')
-  let l:contents = join(getline(3,'$'), "\n")
+  let l:contents = join(getline(3,'$'), &quot;\n&quot;)
 
   if b:entry_is_new == 1
-    echo "Creating...."
-    call webapi#atom#createEntry(
+    echo &quot;Creating....&quot;
+    let r = webapi#atom#createEntry(
       \ plugin#getEndPoint().'/atom',
       \ g:hateblo_vim['user'],
       \ g:hateblo_vim['api_key'],
@@ -85,9 +89,10 @@ function! plugin#saveEntry()
       \   },
       \   'category': l:categories
       \ })
-    echo "Created"
+    echo r
+    echo &quot;Created&quot;
   else
-    echo "Saving...."
+    echo &quot;Saving....&quot;
     call webapi#atom#updateEntry(
       \ b:entry_url,
       \ g:hateblo_vim['user'],
@@ -102,41 +107,18 @@ function! plugin#saveEntry()
       \   },
       \   'category': l:categories
       \ })
-    echo "Saved"
+    echo &quot;Saved&quot;
   endif
   
 endfunction
 
 function! plugin#createEntry()
-    call webapi#atom#createEntry(
-      \ plugin#getEndPoint().'/atom/entry',
-      \ g:hateblo_vim['user'],
-      \ g:hateblo_vim['api_key'],
-      \ {
-      \   'title': 'test',
-      \   'content': 'aaaa',
-      \   'content.type': 'text/plain',
-      \   'content.mode': '',
-      \   'app:control': {
-      \     'app:draft': 'yes'
-      \   },
-      \   'category': ['web']
-      \ })
-  return 1
-  call append(0, "TITLE=")
-  call append(1, "CATEGORIES=")
+  call append(0, &quot;TITLE=&quot;)
+  call append(1, &quot;CATEGORIES=&quot;)
   let b:entry_is_new=1
   execute 'setlocal filetype=markdowm.hateblo'
 endfunction
 
-augroup hateble_env
-  autocmd!
-  autocmd BufWrite hateblo:* call s:a()
-augroup END
-
-function! s:a()
-  call plugin#saveEntry()
-endfunction
 
 function! s:hateblo_settings()
   nmap <leader>u <SID>call plugin#editEntry(b:entry_url)
@@ -151,9 +133,8 @@ command! -nargs=0 Test call plugin#editEntry(plugin#getCandidates()[0]['entry_ur
 command! -nargs=0 TestUp call plugin#editEntry(b:entry_url)
 command! -nargs=0 TestSave call plugin#saveEntry()
 command! -nargs=0 TestCreate call plugin#createEntry()
-command! -nargs=0 TestS echo plugin#getCandidates()[0]
 
-"nmap <leader>b <SID>call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])<CR>
-"call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
+&quot;nmap <leader>b <SID>call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])<CR>
+&quot;call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
 let &cpo = s:save_cpo
 unlet s:save_cpo
