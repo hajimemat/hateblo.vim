@@ -17,15 +17,15 @@ function! s:source.gather_candidates(args,context)
 endfunction
 
 function! s:unite_action_on_choose(candidate)
-  echo a:candidate.action__action
+  "echo a:candidate.action__action
   if a:candidate.action__action == 'edit_entry'
     call hateblo#editor#edit(a:candidate['action__entry_url'])
   elseif a:candidate.action__action == 'next_page'
-    echo a:candidate
+    "echo a:candidate
     call hateblo#entry#getEntriesWithURL(a:candidate.action__url)
     Unite hateblo-list
   elseif a:candidate.action__action == 'reflesh'
-    echo a:candidate
+    "echo a:candidate
     call hateblo#entry#getEntries()
     Unite hateblo-list
   elseif a:candidate.action__action == 'new'

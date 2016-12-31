@@ -4,7 +4,7 @@ set cpo&vim
 
 nmap <leader><leader> :source %<CR>
 
-
+let g:hateblo_draft_marker = "D:"
 augroup hateble_env
   autocmd!
   autocmd BufWriteCmd hateblo:* call hateblo#editor#save()
