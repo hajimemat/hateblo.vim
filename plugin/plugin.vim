@@ -68,14 +68,18 @@ function! plugin#saveEntry(entry_url)
   echo l:title
 endfunction
 
-
 function! s:hateblo_settings()
-  nmap <leader>u <SID>call plugin#editEntry(b:entry_url)<CR>
-  nmap <leader>s <SID>call plugin#saveEntry(b:entry_url)<CR>
+  nmap <leader>u <SID>call plugin#editEntry(b:entry_url)
 endfunction
 
-au NoraAutoCmd FileType *.hateblo call s:hateblo_settings()
+if exists('g:loaded_hajimemat')
+  au NoraAutoCmd FileType *.hateblo call s:hateblo_settings()
+  let g:loaded_hajimemat = 1
+fi
 
-nmap <leader>b <SID>call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])<CR>
+command! -nargs=0 test call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
+
+"nmap <leader>b <SID>call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])<CR>
+"call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
 let &cpo = s:save_cpo
 unlet s:save_cpo
