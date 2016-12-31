@@ -84,9 +84,9 @@ CATEGORIES: cat,cat2
 
 ## ソースコード一式
 
-plugin/plugin.vim
-autoload/hateblo/webapi.vim
-autoload/hateblo/util.vim
-autoload/hateblo/entry.vim
-autoload/hateblo/editor.vim
-autoload/unite/sources/hateblo_list.vim
+- plugin/plugin.vim
+- autoload/hateblo/webapi.vim
+- autoload/hateblo/util.vim
+- autoload/hateblo/entry.vim
+- autoload/hateblo/editor.vim
+- autoload/unite/sources/hateblo_list.vim
