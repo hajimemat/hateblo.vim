@@ -12,7 +12,7 @@ let s:unite_hajimemat_list_source = {
       \ }
 
 function! s:unite_hajimemat_list_source.action_table.on_choose.func(candidate)
-  echo a:candidate.action__action
+  echo a:candidate
 endfunction
 
 function! s:unite_hajimemat_list_source.gather_candidates(args, context)
@@ -22,7 +22,8 @@ function! s:unite_hajimemat_list_source.gather_candidates(args, context)
   for l:entry in l:entries
     call add(l:list, {
       \ 'word': l:entry['title'],
-      \ 'source': 'hajimemat-list'
+      \ 'source': 'hajimemat-list',
+      \ 'kind': 'file',
       \})
   endfor
   return l:list
@@ -33,7 +34,7 @@ function! s:getEntriesList(...)
   let l:api_url = 'https://blog.hatena.ne.jp/kurari0118/hajime-mat.hateblo.jp/atom/entry'
   let l:feed = webapi#atom#getFeed(l:api_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
   let b:entries = l:feed['entry']
-  echo b:entries
+  return b:entries
 endfunction
 
 function! unite#sources#hajimemat_list#define()
