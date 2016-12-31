@@ -1,12 +1,10 @@
+let s:save_cpo=&cpo
+set cpo&vim
 " hoge
-set nonumber
 
-nmap <leader><leader> :source %<CR>
-let title = s:get_title()
+nmap <leader><leader> :source %<CR>:Unite hajimemat-list<CR>
 
-function! s:get_title()
-  echo getline(1)
-  return "a"
-endfunction
 
-echo title
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
