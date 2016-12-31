@@ -23,9 +23,11 @@ function! s:unite_action_on_choose(candidate)
   elseif a:candidate.action__action == 'next_page'
     echo a:candidate
     call hateblo#entry#getEntriesWithURL(a:candidate.action__url)
+    Unite hateblo-list
   elseif a:candidate.action__action == 'reflesh'
     echo a:candidate
     call hateblo#entry#getEntries()
+    Unite hateblo-list
   elseif a:candidate.action__action == 'new'
     call hateblo#editor#create()
   else
