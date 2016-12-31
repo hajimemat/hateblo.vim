@@ -38,7 +38,9 @@ function! plugin#editEntry(entry_url)
   let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
   let l:type = 'html'
   execute 'edit '.l:entry['title'].'.hateblo'
+  echo b:entry_url
   let b:entry_url = a:entry_url
+  let b:entry_is_new = 0
   "echo l:entry
   execute ":%d"
   call append(0, "TITLE=".l:entry['title'])
@@ -63,10 +65,76 @@ function! plugin#getEntryCategory(entry)
   return l:categories
 endfunction
 
-function! plugin#saveEntry(entry_url)
-  let l:title = getline(1)
+function! plugin#saveEntry()
+  let l:title = getline(1)[len('TITLE='):]
+  let l:categories = split(getline(2)[len('CATEGORIES='):],',')
+  let l:contents = join(getline(3,'$'), "\n")
+
   echo l:title
+  echo l:categories
+  echo b:entry_url
+
+  call webapi#atom#createEntry(
+        \ plugin#getEndPoint().'/atom',
+        \ g:hateblo_vim['user'],
+        \ g:hateblo_vim['api_key'],
+        \ {
+        \   'title': l:title,
+        \   'content': l:contents,
+        \   'content.type': 'text/plain',
+        \   'content.mode': '',
+        \   'app:control': {
+        \     'app:draft': 'yes'
+        \   },
+        \   'category': l:categories
+        \ })
+  echo "Created"
+
+  return 1
+
+  if b:entry_is_new == 1
+    echo "Creating...."
+    call webapi#atom#createEntry(
+      \ plugin#getEndPoint().'/atom',
+      \ g:hateblo_vim['user'],
+      \ g:hateblo_vim['api_key'],
+      \ {
+      \   'title': l:title,
+      \   'content': l:contents,
+      \   'content.type': 'text/plain',
+      \   'content.mode': '',
+      \   'app:control': {
+      \     'app:draft': 'yes'
+      \   },
+      \   'category': l:categories
+      \ })
+    echo "Created"
+  else
+    call webapi#atom#updateEntry(
+      \ b:entry_url,
+      \ g:hateblo_vim['user'],
+      \ g:hateblo_vim['api_key'],
+      \ {
+      \   'title': l:title,
+      \   'content': l:contents,
+      \   'content.type': 'text/plain',
+      \   'content.mode': '',
+      \   'app:control': {
+      \     'app:draft': 'yes'
+      \   },
+      \   'category': l:categories
+      \ })
+  endif
+  
 endfunction
+
+function! plugin#createEntry()
+  call append(0, "TITLE=")
+  call append(1, "CATEGORIES=")
+  let b:entry_is_new=1
+  execute 'setlocal filetype=markdowm.hateblo'
+endfunction
+
 
 function! s:hateblo_settings()
   nmap <leader>u <SID>call plugin#editEntry(b:entry_url)
@@ -77,7 +145,10 @@ if exists('g:loaded_hajimemat')
   let g:loaded_hajimemat = 1
 endif
 
-command! -nargs=0 test call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
+command! -nargs=0 Test call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
+command! -nargs=0 TestUp call plugin#editEntry(b:entry_url)
+command! -nargs=0 TestSave call plugin#saveEntry()
+command! -nargs=0 TestCreate call plugin#createEntry()
 
 "nmap <leader>b <SID>call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])<CR>
 "call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
