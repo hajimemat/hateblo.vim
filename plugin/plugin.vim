@@ -54,7 +54,6 @@ function! plugin#editEntry(entry_url)
   execute 'setlocal filetype='.l:type.'.hateblo'
 endfunction
 
-echo plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
 
 function! plugin#getEntryCategory(entry)
   let l:categories = []
@@ -77,5 +76,6 @@ endfunction
 
 au NoraAutoCmd FileType *.hateblo call s:hateblo_settings()
 
+nmap <leader>b <SID>call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])<CR>
 let &cpo = s:save_cpo
 unlet s:save_cpo
