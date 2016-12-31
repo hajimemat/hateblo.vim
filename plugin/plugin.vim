@@ -12,7 +12,7 @@ augroup hateble_env
 augroup END
 
 function! s:hateblo_env()
-  cmap w :wwwwww
+  cmap <buffer> w call hateblo#editor#save()
 endfunction
 
 
