@@ -1,6 +1,6 @@
 " 編集
 function! hateblo#editor#edit(entry_url)
-  let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo_vim['user'],g:hateblo_vim['api_key'])
+  let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo['user'],g:hateblo['api_key'])
   let l:type = 'html'
   execute 'edit hateblo:'.fnameescape(l:entry['title'])
   execute ":%d"
@@ -70,8 +70,8 @@ function! hateblo#editor#save()
   if b:entry_is_new == 1
     call webapi#atom#createEntry(
       \ hateblo#webapi#getEntryEndPoint(),
-      \ g:hateblo_vim['user'],
-      \ g:hateblo_vim['api_key'],
+      \ g:hateblo['user'],
+      \ g:hateblo['api_key'],
       \ {
       \   'title': l:title,
       \   'content': l:contents,
@@ -89,8 +89,8 @@ function! hateblo#editor#save()
   else
     call webapi#atom#updateEntry(
       \ b:entry_url,
-      \ g:hateblo_vim['user'],
-      \ g:hateblo_vim['api_key'],
+      \ g:hateblo['user'],
+      \ g:hateblo['api_key'],
       \ {
       \   'title': l:title,
       \   'content': l:contents,
