@@ -75,7 +75,7 @@ endfunction
 if exists('g:loaded_hajimemat')
   au NoraAutoCmd FileType *.hateblo call s:hateblo_settings()
   let g:loaded_hajimemat = 1
-fi
+endif
 
 command! -nargs=0 test call plugin#editEntry(plugin#getCandidates()[0]['entry_url'])
 
