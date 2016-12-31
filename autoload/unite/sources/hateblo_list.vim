@@ -17,9 +17,12 @@ function! s:source.gather_candidates(args,context)
 endfunction
 
 function! s:unite_action_on_choose(candidate)
-  echo a:candidate
   if a:candidate.action__action == 'edit_entry'
     call hateblo#editor#edit(a:candidate['action__entry_url'])
+  elseif a:candidate.action__action == 'next'
+    call hateblo#entry#getEntriesWithURL(a:candidate.action__url)
+  elseif a:candidate.action__action == 'new'
+    call hateblo#editor#create()
   else
     echo 'not impl'
   endif
