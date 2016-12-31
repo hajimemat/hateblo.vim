@@ -2,7 +2,8 @@
 function! hateblo#editor#edit(entry_url)
   let l:entry = webapi#atom#getEntry(a:entry_url, g:hateblo['user'],g:hateblo['api_key'])
   let l:type = 'html'
-  execute 'edit hateblo:'.fnameescape(l:entry['title'])
+  setlocal buftype=nowrite noswapfile
+  execute bufname('hateblo:'.fnameescape(l:entry['title']))
   execute ":%d"
   let b:entry_url = a:entry_url
   let b:entry_is_new = 0
