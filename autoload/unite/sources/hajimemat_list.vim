@@ -13,7 +13,7 @@ let s:unite_hajimemat_list_source = {
 
 function! s:unite_hajimemat_list_source.action_table.on_choose.func(candidate)
   echo a:candidate
-  s:detailEntry(a:candidate:entry_url)
+  call s:detailEntry(a:candidate:entry_url)
 endfunction
 
 function! s:unite_hajimemat_list_source.gather_candidates(args, context)
